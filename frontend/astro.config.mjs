@@ -1,7 +1,11 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
+import { defineConfig, envField } from 'astro/config';
+import { loadEnv } from "vite";
 
 import sitemap from '@astrojs/sitemap';
+
+const { SITE_URL } =
+  loadEnv(process.env.NODE_ENV, process.cwd(), "");
 
 // https://astro.build/config
 export default defineConfig({
@@ -9,9 +13,44 @@ export default defineConfig({
     enabled: false
   },
   prefetch: true,
-  site: 'https://playersclub88.netlify.app/',
+  trailingSlash: "never",
+  site: SITE_URL,
   integrations: [sitemap()],
   experimental: {
     svg: true,
+  },
+  image: {
+    domains: ["cdn.sanity.io"],
+    remotePatterns: [{ protocol: "https" }],
+  },
+  vite: {
+    server: {
+      // // enable cloudflare tunnel
+      // allowedHosts: true,
+    },
+    css: {
+      devSourcemap: true,
+    },
+  },
+  env: {
+    schema: {
+      SITE_URL: envField.string({
+        context: "client",
+        access: "public",
+      }),
+      POLAR_ACCESS_TOKEN: envField.string({
+        context: "server",
+        access: "secret",
+      }),
+      SANITY_STUDIO_PROJECT_ID: envField.string({
+        context: "client",
+        access: "public",
+      }),
+      SANITY_STUDIO_DATASET: envField.string({
+        context: "client",
+        access: "public",
+        default: "production",
+      }),
+    },
   },
 });

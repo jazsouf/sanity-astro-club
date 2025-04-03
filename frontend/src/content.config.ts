@@ -1,5 +1,48 @@
 import { defineCollection, reference, z } from 'astro:content';
 import { glob } from 'astro/loaders';
+import { getAllCreators, getAllProducts } from './data/sanity';
+
+
+const products = defineCollection({
+  loader: async () => {
+    const result = await getAllProducts();
+    return result.data
+  },
+  schema: z.object({
+    _id: z.string(),
+    _type: z.string(),
+    _createdAt: z.string(),
+    _updatedAt: z.string(),
+    status: z.string(),
+    slug: z.string(),
+    name: z.string(),
+    publishedAt: z.date(),
+    image: z.object({
+      src: z.string(),
+      alt: z.string(),
+    }),
+    publishDate: z.date(),
+    tracks: z.array(z.string()),
+    artist: reference('artists'),
+  }),
+});
+
+const creators = defineCollection({
+  loader: async () => {
+    const result = await getAllCreators();
+    return result.data
+  },
+  schema: z.object({
+    name: z.string(),
+    image: z.object({
+      ref: z.string(),
+      alt: z.string(),
+    }),
+    publishedAt: z.date(),
+    tracks: z.array(z.string()),
+    artist: reference('artists'),
+  }),
+});
 
 const artists = defineCollection({
   loader: glob({ pattern: '**/*.md', base: "./src/data/artists" }),
@@ -13,7 +56,7 @@ const artists = defineCollection({
     }),
   }),
 });
- 
+
 const albums = defineCollection({
   loader: glob({ pattern: '**/*.md', base: "./src/data/albums" }),
   schema: z.object({
@@ -28,5 +71,6 @@ const albums = defineCollection({
   }),
 });
 
+
 // Export all collections
-export const collections = {artists, albums};
+export const collections = {artists, albums, products, creators};

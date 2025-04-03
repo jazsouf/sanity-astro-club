@@ -1,4 +1,7 @@
-- [x] Add polar data to sanity
-- [ ] Setup queries
+# TODO
+
+- [ ] Setup groq queries
 - [ ] Adapt content collections
-- [ ] Adapt frontend pages
+- [ ] Adapt frontend
+
+- [x] Add polar data to sanity

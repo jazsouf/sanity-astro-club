@@ -89,7 +89,6 @@ export function ProductSelector(props: StringInputProps) {
             </option>
           );
         })}
-        <Button>Reset</Button>
       </Select>
     </>
   );
