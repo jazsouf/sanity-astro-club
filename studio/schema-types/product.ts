@@ -35,7 +35,7 @@ export const product = defineType({
       to: [{ type: "creator" }],
     }),
     defineField({
-      name: "image",
+      name: "imageWithAlt",
       type: "imageWithAlt",
       validation: (rule) => rule.required(),
     }),

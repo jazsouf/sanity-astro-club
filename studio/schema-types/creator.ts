@@ -27,7 +27,7 @@ export const creator = defineType({
       },
     }),
     defineField({
-      name: "image",
+      name: "imageWithAlt",
       type: "imageWithAlt",
       validation: (rule) => rule.required(),
     }),

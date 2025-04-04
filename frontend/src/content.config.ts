@@ -1,12 +1,27 @@
 import { defineCollection, reference, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { getAllCreators, getAllProducts } from './data/sanity';
+import { getProductById } from './data/polar';
 
 
 const products = defineCollection({
   loader: async () => {
     const result = await getAllProducts();
-    return result.data
+
+    const productsWithPrice = await Promise.all(
+          result.data.map(async (product) => {
+            const sku = product.sku;
+            if (typeof sku !== 'string') {
+              return {...product}
+            }
+            const polarData = await getProductById(sku);
+            return {
+              ...product,
+              price: polarData.price
+            };
+          })
+        );
+    return productsWithPrice
   },
   schema: z.object({
     _id: z.string(),
@@ -16,13 +31,18 @@ const products = defineCollection({
     status: z.string(),
     slug: z.string(),
     name: z.string(),
-    publishedAt: z.date().optional(),
-    image: z.object({
+    publishedAt: z.string().optional(),
+    imageWithAlt: z.object({
       ref: z.string(),
       alt: z.string(),
     }),
     sku: z.string().optional(),
+    price: z.object({
+      amount: z.number(),
+      currency: z.string()
+    }).optional(),
     creator: reference('creators'),
+
   }),
 });
 
@@ -40,7 +60,7 @@ const creators = defineCollection({
     slug: z.string(),
     name: z.string(),
     alias: z.string().optional(),
-    image: z.object({
+    imageWithAlt: z.object({
       ref: z.string(),
       alt: z.string(),
     }),

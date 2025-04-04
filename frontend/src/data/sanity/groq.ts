@@ -10,9 +10,9 @@ const productBaseFields = /* groq */ `
   "slug": slug.current,
   name,
   publishedAt,
-  "image": {
-    "ref": image.asset.ref,
-    "alt" : image.alt
+  imageWithAlt {
+    "ref": asset._ref,
+    alt,
   },
   sku,
 `;
@@ -27,26 +27,22 @@ const creatorBaseFields = /* groq */ `
   "slug": slug.current,
   "name": coalesce(name, "Untitled"),
   "alias": coalesce(alias, ^.name),
-  "image": {
-    "ref": image.asset.ref,
-    "alt" : image.alt
+  imageWithAlt {
+    "ref": asset._ref,
+    alt,
   },
 `;
 
 export const ALL_PRODUCTS_QUERY = defineQuery(`
   *[_type == "product"] {
     ${productBaseFields}
-    creator->{
-      ${creatorBaseFields}
-    }
+    "creator" : creator->.slug.current,
   }
 `);
 
 export const ALL_CREATORS_QUERY = defineQuery(`
   *[_type == "creator"] {
     ${creatorBaseFields}
-    "products": *[_type == "product" && creator._ref == ^._id] {
-      ${productBaseFields}
-    }
+    "products": *[_type == "product" && creator._ref == ^._id].slug.current,
   }
 `);
