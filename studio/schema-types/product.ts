@@ -47,5 +47,9 @@ export const product = defineType({
         input: ProductSelector,
       },
     }),
+    defineField({
+      name: "content",
+      type: "portableText",
+    }),
   ],
 });

@@ -15,6 +15,7 @@ const productBaseFields = /* groq */ `
     alt,
   },
   sku,
+  content,
 `;
 
 const creatorBaseFields = /* groq */ `
@@ -31,6 +32,7 @@ const creatorBaseFields = /* groq */ `
     "ref": asset._ref,
     alt,
   },
+  content,
 `;
 
 export const ALL_PRODUCTS_QUERY = defineQuery(`

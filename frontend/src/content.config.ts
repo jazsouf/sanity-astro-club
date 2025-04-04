@@ -36,6 +36,7 @@ const products = defineCollection({
       ref: z.string(),
       alt: z.string(),
     }),
+    content: z.array(z.unknown()),
     sku: z.string().optional(),
     price: z.object({
       amount: z.number(),
@@ -64,6 +65,7 @@ const creators = defineCollection({
       ref: z.string(),
       alt: z.string(),
     }),
+    content: z.array(z.unknown()),
     products: z.array(reference('products')),
   }),
 });

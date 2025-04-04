@@ -31,5 +31,9 @@ export const creator = defineType({
       type: "imageWithAlt",
       validation: (rule) => rule.required(),
     }),
+    defineField({
+      name: "content",
+      type: "portableText",
+    }),
   ],
 });
