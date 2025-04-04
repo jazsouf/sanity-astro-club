@@ -9,7 +9,7 @@ export async function sanityFetch<QueryResponse>({
   query: string;
   params?: QueryParams;
 }) {
-  const { result, resultSourceMap } = await client.fetch<QueryResponse>(
+  const { result } = await client.fetch<QueryResponse>(
     query,
     params ?? {},
     {
@@ -21,6 +21,5 @@ export async function sanityFetch<QueryResponse>({
 
   return {
     data: result,
-    sourceMap: resultSourceMap,
   };
 }

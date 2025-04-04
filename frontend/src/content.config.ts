@@ -16,14 +16,13 @@ const products = defineCollection({
     status: z.string(),
     slug: z.string(),
     name: z.string(),
-    publishedAt: z.date(),
+    publishedAt: z.date().optional(),
     image: z.object({
-      src: z.string(),
+      ref: z.string(),
       alt: z.string(),
     }),
-    publishDate: z.date(),
-    tracks: z.array(z.string()),
-    artist: reference('artists'),
+    sku: z.string().optional(),
+    creator: reference('creators'),
   }),
 });
 
@@ -33,14 +32,19 @@ const creators = defineCollection({
     return result.data
   },
   schema: z.object({
+    _id: z.string(),
+    _type: z.string(),
+    _createdAt: z.string(),
+    _updatedAt: z.string(),
+    status: z.string(),
+    slug: z.string(),
     name: z.string(),
+    alias: z.string().optional(),
     image: z.object({
       ref: z.string(),
       alt: z.string(),
     }),
-    publishedAt: z.date(),
-    tracks: z.array(z.string()),
-    artist: reference('artists'),
+    products: z.array(reference('products')),
   }),
 });
 

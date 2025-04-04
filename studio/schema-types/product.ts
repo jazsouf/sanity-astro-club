@@ -10,12 +10,13 @@ export const product = defineType({
       name: "name",
       title: "Name",
       type: "string",
+      validation: (rule) => rule.required(),
     }),
     defineField({
       name: "slug",
       title: "Slug",
       type: "slug",
-      validation: (Rule) => Rule.required(),
+      validation: (rule) => rule.required(),
       options: {
         source: "name",
         maxLength: 96,
@@ -30,11 +31,13 @@ export const product = defineType({
       name: "creator",
       title: "Creator",
       type: "reference",
+      validation: (rule) => rule.required(),
       to: [{ type: "creator" }],
     }),
     defineField({
       name: "image",
       type: "imageWithAlt",
+      validation: (rule) => rule.required(),
     }),
     defineField({
       name: "sku",
