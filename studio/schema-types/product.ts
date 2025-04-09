@@ -7,6 +7,14 @@ export const product = defineType({
   type: "document",
   fields: [
     defineField({
+      name: "sku",
+      title: "SKU",
+      type: "string",
+      components: {
+        input: ProductSelector,
+      },
+    }),
+    defineField({
       name: "name",
       title: "Name",
       type: "string",
@@ -31,6 +39,9 @@ export const product = defineType({
       name: "creator",
       title: "Creator",
       type: "reference",
+      options: {
+        disableNew: true,
+      },
       validation: (rule) => rule.required(),
       to: [{ type: "creator" }],
     }),
@@ -40,16 +51,15 @@ export const product = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
-      name: "sku",
-      title: "SKU",
-      type: "string",
-      components: {
-        input: ProductSelector,
-      },
-    }),
-    defineField({
       name: "content",
       type: "portableText",
     }),
   ],
+  preview: {
+    select: {
+      title: "name",
+      subtitle: "sku",
+      media: "imageWithAlt",
+    },
+  },
 });

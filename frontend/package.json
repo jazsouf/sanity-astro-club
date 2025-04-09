@@ -11,15 +11,15 @@
   },
   "dependencies": {
     "@astrojs/check": "0.9.4",
-    "@astrojs/sitemap": "^3.2.1",
-    "@fontsource-variable/instrument-sans": "^5.1.0",
+    "@astrojs/sitemap": "^3.3.0",
+    "@fontsource-variable/instrument-sans": "^5.2.5",
     "@sanity/client": "^6.28.4",
-    "astro": "^5.5.6",
+    "astro": "^5.6.1",
     "astro-seo": "^0.8.4",
-    "groq": "^3.82.0",
-    "gsap": "^3.12.5",
+    "groq": "^3.83.0",
+    "gsap": "^3.12.7",
     "imagesloaded": "^5.0.0",
-    "lenis": "^1.1.17",
+    "lenis": "^1.2.3",
     "vite": "^6.2.5"
   },
   "devDependencies": {

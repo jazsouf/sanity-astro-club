@@ -15,21 +15,20 @@
     "sanity"
   ],
   "dependencies": {
-    "@polar-sh/sdk": "^0.32.4",
     "@sanity/icons": "^3.7.0",
     "@sanity/studio-secrets": "^3.0.1",
     "@sanity/ui": "^2.15.12",
-    "@sanity/vision": "^3.82.0",
+    "@sanity/vision": "^3.83.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "sanity": "^3.82.0",
+    "sanity": "^3.83.0",
     "styled-components": "^6.1.17"
   },
   "devDependencies": {
     "@sanity/eslint-config-studio": "^5.0.2",
     "@types/react": "^19",
-    "eslint": "^9.23.0",
+    "eslint": "^9.24.0",
     "prettier": "^3.5.3",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.3"
   }
 }

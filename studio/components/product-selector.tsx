@@ -36,7 +36,7 @@ export function ProductSelector(props: StringInputProps) {
     }
 
     setIsLoading(true);
-    fetch("https://api.polar.sh/v1/products/", {
+    fetch("https://api.polar.sh/v1/products/?limit=100", {
       method: "GET",
       headers: { Authorization: `Bearer ${secrets.polarAccessTokenProducts}` },
     })
@@ -44,9 +44,11 @@ export function ProductSelector(props: StringInputProps) {
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
+
         return response.json();
       })
       .then((response) => {
+        console.log(response);
         setProducts(response.items || []);
         setIsLoading(false);
       })

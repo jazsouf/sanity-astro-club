@@ -36,4 +36,11 @@ export const creator = defineType({
       type: "portableText",
     }),
   ],
+  preview: {
+    select: {
+      title: "name",
+      subtitle: "alias",
+      media: "imageWithAlt",
+    },
+  },
 });
