@@ -1,0 +1,48 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+type Props = {
+  product: CollectionEntry<"products">;
+};
+
+const { product } = Astro.props;
+---
+
+<a class="product-card" href={`/${product.data.creator.id}/products/${product.id}`}>
+  <div>
+    <img
+      class="fade-in"
+      loading="lazy"
+      src={product.data.imageWithAlt.ref}
+      alt={product.data.imageWithAlt.alt}
+    />
+  </div>
+  <h3>{product.data.name}</h3>
+  <p>{new Date(product.data.publishedAt).getFullYear()}</p>
+</a>
+
+<style>
+  .product-card {
+    display: flex;
+    gap: 0.5rem;
+    flex-direction: column;
+    align-content: start;
+    max-width: 300px;
+  }
+  div {
+    aspect-ratio: 1;
+    grid-area: img;
+    background: var(--color-placeholder);
+  }
+  h3,
+  p {
+    margin: 0;
+  }
+  h3 {
+    grid-area: title;
+  }
+  p {
+    justify-self: end;
+    grid-area: meta;
+  }
+</style>

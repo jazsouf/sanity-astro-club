@@ -1,0 +1,111 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { getCollection, render } from "astro:content";
+import ProductGrid from "../components/ProductGrid.astro";
+import Separator from "../components/Separator.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+export const getStaticPaths = async () => {
+  // Fetch all creators from the 'creators' collection
+  const creators = await getCollection("creators");
+
+  // Map over the creators to generate paths for each creator's page
+  const paths = creators.map((creator) => {
+    return {
+      params: { creator_id: creator.id }, // URL parameter for the creator's ID
+      props: { creators, creator }, // Pass the full creator and all creators as props
+    };
+  });
+
+  // Return the generated paths to Astro for static page generation
+  return paths;
+};
+
+type Props = {
+  creators: CollectionEntry<"creators">[]; // Array of all creators in the collection
+  creator: CollectionEntry<"creators">; // Current creator being rendered
+};
+
+const { creators, creator } = Astro.props; // Extract the creators list and current creator from the props
+
+// Extract the ID of the current creator
+const creator_id = creator.id;
+
+// Find the index of the current creator in the creators array
+const currentCreatorIndex = creators.findIndex((a) => a.id === creator_id);
+
+// Calculate the index of the "next" creator in the array (wrap around if at the last creator)
+const nextCreatorIndex = (currentCreatorIndex + 1) % creators.length;
+
+// Get the "next" creator based on the calculated index
+const nextCreator = creators[nextCreatorIndex];
+
+// Fetch all products that belong to the current creator
+const products = await getCollection(
+  "products",
+  ({ data }) => data.creator.id === creator_id,
+);
+
+// Render the content of the current creator (e.g., markdown or MDX)
+const { Content } = await render(creator);
+---
+
+<BaseLayout title={creator.data.name}>
+  <section>
+    <header class="title-header">
+      <h2>
+        {creator.data.alias}
+        <span class="faded">({creator.data.name})</span>
+      </h2>
+      <div>
+        <a class="back" href="/">View all</a>
+        <span class="faded">/</span>
+        <a href={`/${nextCreator.id}`}>Next creator</a>
+      </div>
+    </header>
+    <Separator />
+    <div class="content-wrap">
+      <img
+        class="image fade-in"
+        src={creator.data.imageWithAlt.ref}
+        alt={creator.data.imageWithAlt.alt}
+      />
+      <div class="content">
+        <h3>Biography</h3>
+        <Content />
+        <dl>
+          <dt>Genre</dt><dd>{creator.data.content}</dd>
+        </dl>
+      </div>
+      {
+        products.length > 0 && (
+        <div class="products">
+            <h3>Releases</h3>
+            <ProductGrid products={products} />
+          </div>
+        )
+      }
+    </div>
+  </section>
+</BaseLayout>
+<style>
+  .content-wrap {
+    grid-template-areas: "img" "content" "products";
+    grid-template-columns: 100%;
+    @media screen and (min-width: 44em) {
+      grid-template-columns: 1fr auto;
+      grid-template-areas: "img img" "content products";
+    }
+    @media screen and (min-width: 50em) {
+      grid-template-columns: 30vw 1fr 170px;
+      grid-template-areas: "img content products";
+    }
+  }
+  .products {
+    grid-area: products;
+  }
+  .content p:last-child {
+    margin-top: 2.5rem;
+    display: flex;
+  }
+</style>

@@ -1,0 +1,81 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { getCollection, getEntry, render } from "astro:content";
+import Separator from "../../../components/Separator.astro";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+
+export const getStaticPaths = async () => {
+  // Fetch all products from the 'products' collection
+  const products = await getCollection("products");
+
+  /*
+  // Filter products to ensure each has valid creator data, then map to generate paths
+  const paths = products.filter(product => product.data.creator && product.data.creator.id) // Ensure the product has a valid creator reference
+  .map((product) => {
+    return {
+      params: {
+        creator_id: product.data.creator.id, // Include creator ID in the route parameters
+        product_id: product.id,             // Include product ID in the route parameters
+      },
+      props: {
+        creator: product.data.creator,      // Pass the creator data as props
+        product                           // Pass the product data as props
+      },
+    };
+  });
+  */
+
+  const paths = await Promise.all(
+    products.map(async (product) => {
+      const creator = await getEntry("creators", product.data.creator.id); // Fetch creator by ID
+      return {
+        params: {
+          creator_id: product.data.creator.id, // Include creator ID in route parameters
+          product_id: product.id, // Include product ID in route parameters
+        },
+        props: {
+          creator, // Pass full creator data as props
+          product, // Pass product data as props
+        },
+      };
+    }),
+  );
+
+  // Return the generated paths for static page generation
+  return paths;
+};
+
+type Props = {
+  creator: CollectionEntry<"creators">; // The creator associated with the product
+  product: CollectionEntry<"products">; // The product being rendered
+};
+
+const { creator, product } = Astro.props; // Extract creator and product data from props
+
+// Render the content of the product (e.g., markdown or MDX content)
+const { Content } = await render(product);
+---
+
+<BaseLayout title={product.data.name}>
+  <section>
+    <header class="title-header">
+      <h2>
+        {product.data.name}
+        <span class="faded">by {creator.data.alias}</span>
+      </h2>
+      <div><a class="back" href={`/${creator.id}`}>Back to creator</a></div>
+    </header>
+    <Separator />
+    <div class="content-wrap">
+      <img
+        class="image fade-in"
+        src={product.data.imageWithAlt.ref}
+        alt={product.data.imageWithAlt.alt}
+      />
+      <div class="content">
+        <!-- TODO convert to PortableText -->
+        <Content />
+      </div>
+    </div>
+  </section>
+</BaseLayout>
