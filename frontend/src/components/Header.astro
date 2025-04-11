@@ -1,6 +1,6 @@
 ---
-import TextSlider from "../components/TextSlider.astro";
 import Separator from "../components/Separator.astro";
+import TextSlider from "../components/TextSlider.astro";
 
 // Get the current pathname
 const currentPath = Astro.url.pathname;
@@ -19,9 +19,9 @@ const activeRoute = routes[currentPath] || null;
 <header>
   <h1>
     <a href="/" class={activeRoute === "Home" ? "current" : ""}
-      ><TextSlider content="Players Club" /></a>
+      ><TextSlider content="Astro Sanity Club" /></a>
   </h1>
-  <span><TextSlider content="Record Label" /></span>
+  <span><TextSlider content="Creators Collective" /></span>
   <ul>
     <li>
       <a
