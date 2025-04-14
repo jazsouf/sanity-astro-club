@@ -1,23 +1,36 @@
 ---
 import type { CollectionEntry } from "astro:content";
 import ProductCard from "./ProductCard.astro";
+import ProductTooltip from "./ProductTooltip.astro";
 
 type Props = {
   products: CollectionEntry<"products">[];
 };
 
 const { products } = Astro.props;
+const grid = "products";
 ---
 
-<section>
+<section class="product-grid" id='grid' data-grid={grid}>
   {products.map((product) => <ProductCard product={product} />)}
 </section>
 
+<ProductTooltip grid={grid} />
+
 <style>
-  section {
-    display: flex;
+  .product-grid {
+    position: relative;
+    overflow: hidden;
+    display: grid;
     width: 100%;
-    gap: 2rem;
-    flex-direction: column;
+    grid-template-columns: repeat(2, calc(100% / 2));
+    margin: 1rem 0 10rem;
+    min-height: 400px;
+    @media screen and (min-width: 30em) {
+      grid-template-columns: repeat(4, calc(100% / 4));
+    }
+    @media screen and (min-width: 50em) {
+      grid-template-columns: repeat(6, calc(100% / 6));
+    }
   }
 </style>

@@ -81,9 +81,7 @@ a {
   }
 }
 
-img {
-  display: block;
-}
+
 
 .fade-in {
   opacity: 0;
@@ -125,6 +123,7 @@ button {
 }
 
 img {
+  display: block;
   max-width: 100%;
 }
 

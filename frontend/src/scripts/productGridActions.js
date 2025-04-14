@@ -90,8 +90,10 @@ const sortGrid = () => {
 const filterGrid = (searchValue) => {
   const lowerCaseSearch = searchValue.toLowerCase();
   gridItems.forEach((item) => {
-    const creatorName = item.getAttribute('data-creator').toLowerCase();
-    const productTitle = item.getAttribute('data-product').toLowerCase();
+    const creatorName = item.getAttribute('data-creatorName').toLowerCase();
+    const productTitle = item.getAttribute('data-productTitle').toLowerCase();
+    console.log(creatorName, productTitle);
+
     item.style.display =
       creatorName.includes(lowerCaseSearch) || productTitle.includes(lowerCaseSearch)
         ? ''

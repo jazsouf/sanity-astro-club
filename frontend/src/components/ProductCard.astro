@@ -1,26 +1,25 @@
 ---
 import type { CollectionEntry } from "astro:content";
+import SanityImage from "./SanityImage.astro";
 
 type Props = {
   product: CollectionEntry<"products">;
 };
 
 const { product } = Astro.props;
+
+
+
 ---
 
 <a class="product-card"
-data-productTitle={product.data.name}
-data-creatorName={product.data.creator.id}
+data-product-title={product.data.name}
+data-creator-name={product.data.creator.id}
 data-price={product.data.price.amount}
 data-astro-prefetch
 href={`/${product.data.creator.id}/products/${product.id}`}>
   <div>
-    <img
-      class="fade-in"
-      loading="lazy"
-      src={product.data.imageWithAlt.ref}
-      alt={product.data.imageWithAlt.alt}
-    />
+    <SanityImage node={product.data.imageWithAlt} width={300}  />
   </div>
   <h3>{product.data.name}</h3>
   <p>{new Date(product.data.publishedAt).getFullYear()}</p>
@@ -35,8 +34,6 @@ href={`/${product.data.creator.id}/products/${product.id}`}>
     max-width: 300px;
   }
   div {
-    aspect-ratio: 1;
-    grid-area: img;
     background: var(--color-placeholder);
   }
   h3,

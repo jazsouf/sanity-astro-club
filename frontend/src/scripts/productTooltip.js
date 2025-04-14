@@ -6,9 +6,8 @@ class Tooltip {
     this.products = this.grid.children;
     if (this.products.length === 0) return;
     this.tooltip = document.querySelector('.tooltip');
-    this.arrow = this.tooltip.querySelector('.tooltip__row--ra svg');
     this.OFFSET_X = 20; // Distance from cursor to left edge of tooltip
-    this.OFFSET_Y = 0;  // Distance from cursor to top edge of tooltip
+    this.OFFSET_Y = -60;  // Distance from cursor to top edge of tooltip
     this.animationConfig = {
       // Configuration for the text animations (e.g., rows sliding in/out)
       texts: {
@@ -30,7 +29,6 @@ class Tooltip {
       productTitle: { in: { yPercent: -100 }, out: { yPercent: -100 } }, // In and out to/from the top
       creatorName: { in: { yPercent: 100 }, out: { yPercent: 100 } },        // In and out to/from the bottom
       price: { in: { yPercent: 100 }, out: { yPercent: 100 } },       // In and out to/from the bottom
-      arrow: { in: { yPercent: -100 }, out: { yPercent: -100 } },     // In and out to/from the top
     };
     this.hoverTarget = null; // Tracks the currently hovered `.product`
     this.isTooltipVisible = false; // Tracks tooltip visibility
@@ -38,7 +36,6 @@ class Tooltip {
     this.scaleDownTimeline; // Stores the tooltip scale-down timeline
     this.mouseLeaveTimeout; // Timeout for mouseleave handling
     this.rowTimelines = {}; // Stores timelines for each row
-    this.arrowTimeline = null; // Stores the arrow animation timeline
     this.windowWidth = window.innerWidth; // Cache window width
 
     // Define smooth animations for moving the tooltip
@@ -119,8 +116,11 @@ class Tooltip {
     const creatorName = this.hoverTarget.dataset.creatorName;
     const price = this.hoverTarget.dataset.price;
 
+    console.log(this.hoverTarget.dataset);
+
+
     const updateTimeline = gsap.timeline();
-    this.updateTooltip({ productTitle: productTitle, creatorName, price }, updateTimeline, this.isTooltipVisible ? 'none' : 'in');
+    this.updateTooltip({ productTitle, creatorName, price }, updateTimeline, this.isTooltipVisible ? 'none' : 'in');
   };
 
   handleMouseLeave = () => {
@@ -149,7 +149,6 @@ class Tooltip {
   }
 
   destroy() {
-    if (this.arrowTimeline) this.arrowTimeline.kill();
     if (this.scaleDownTimeline) this.scaleDownTimeline.kill();
     Object.values(this.rowTimelines).forEach(timeline => timeline && timeline.kill());
 
@@ -172,11 +171,6 @@ class Tooltip {
       const rowSelector = `[data-field="${field}"]`;
       this.updateTextSlider(rowSelector, newValue, timeline, direction);
     });
-
-    // Animate the arrow only when tooltip appears/disappears
-    if ((direction === 'in' && !this.isTooltipVisible) || (direction === 'out' && this.isTooltipVisible)) {
-      this.animateArrow(timeline, direction);
-    }
   }
 
   // Function to update a single row with sliding animation and add to a timeline
@@ -265,36 +259,6 @@ class Tooltip {
     timeline.add(this.rowTimelines[rowSelector], 0);
   }
 
-  // Animate the arrow component
-  animateArrow(timeline, direction = 'none') {
-    if (!this.arrow) return;
-
-    // Kill and reset existing arrow animation
-    if (this.arrowTimeline) {
-      this.arrowTimeline.kill();
-    }
-    this.arrowTimeline = gsap.timeline();
-
-    // Determine animation direction for the arrow
-    const animationDirection = this.rowAnimationDirections['arrow'];
-
-    if (direction === 'in') {
-      this.arrowTimeline.fromTo(this.arrow, {
-        ...animationDirection.in,
-      }, {
-        ...this.animationConfig.texts,
-        yPercent: 0,
-      }, this.animationConfig.textsDelay);
-    } else if (direction === 'out') {
-      this.arrowTimeline.to(this.arrow, {
-        ...this.animationConfig.texts,
-        ...animationDirection.out,
-      }, 0);
-    }
-
-    // Add arrow animation to the main timeline
-    timeline.add(this.arrowTimeline, 0);
-  }
 }
 
 let tooltip;

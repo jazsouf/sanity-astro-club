@@ -1,0 +1,76 @@
+---
+import TextSlider from "../components/TextSlider.astro";
+
+type Props = {
+  grid: string;
+};
+
+const { grid } = Astro.props;
+---
+
+<div class="tooltip" data-grid={grid}>
+  <div class="tooltip__row" >
+    <div data-field="productTitle">
+      <!-- Product Title -->
+      <div class="tooltip__content">
+        <TextSlider />
+      </div>
+      <div class="tooltip__content">
+        <TextSlider />
+      </div>
+    </div>
+    <div data-field="creatorName">
+      <!-- Creator Name -->
+      <div class="tooltip__content">
+        <TextSlider />
+      </div>
+      <div class="tooltip__content">
+        <TextSlider />
+      </div>
+    </div>
+    <div data-field="price">
+      <!-- Price -->
+      <div class="tooltip__content">
+        <TextSlider />
+      </div>
+      <div class="tooltip__content">
+        <TextSlider />
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .tooltip {
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 240px;
+    background: #abcdef;
+    color: #000;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    pointer-events: none;
+    justify-content: space-between;
+    will-change: transform;
+  }
+  .tooltip__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    padding: 0.2rem;
+  }
+  .tooltip__row > [data-field="productTitle"] {
+    text-transform: uppercase;
+    font-weight: bold;
+    color: #fff;
+  }
+  .tooltip__content {
+    grid-area: tt-content;
+    white-space: nowrap;
+  }
+</style>
+
+<script src="../scripts/productTooltip.js"></script>
