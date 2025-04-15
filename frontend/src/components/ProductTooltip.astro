@@ -1,4 +1,5 @@
 ---
+import Arrow from "../assets/images/arrow.svg";
 import TextSlider from "../components/TextSlider.astro";
 
 type Props = {
@@ -9,33 +10,39 @@ const { grid } = Astro.props;
 ---
 
 <div class="tooltip" data-grid={grid}>
-  <div class="tooltip__row" >
-    <div data-field="productTitle">
-      <!-- Product Title -->
-      <div class="tooltip__content">
-        <TextSlider />
-      </div>
-      <div class="tooltip__content">
-        <TextSlider />
-      </div>
+  <div class="tooltip__row" data-field="productTitle">
+    <!-- Product Tile -->
+    <div class="tooltip__content">
+      <TextSlider />
     </div>
-    <div data-field="creatorName">
-      <!-- Creator Name -->
-      <div class="tooltip__content">
-        <TextSlider />
-      </div>
-      <div class="tooltip__content">
-        <TextSlider />
-      </div>
+    <div class="tooltip__content">
+      <TextSlider />
     </div>
-    <div data-field="price">
-      <!-- Price -->
-      <div class="tooltip__content">
-        <TextSlider />
-      </div>
-      <div class="tooltip__content">
-        <TextSlider />
-      </div>
+  </div>
+
+  <div class="tooltip__row tooltip__row--ra">
+    <TextSlider>
+      <Arrow />
+    </TextSlider>
+  </div>
+
+  <div class="tooltip__row" data-field="creatorName">
+    <!-- Creator Name -->
+    <div class="tooltip__content">
+      <TextSlider />
+    </div>
+    <div class="tooltip__content">
+      <TextSlider />
+    </div>
+  </div>
+
+  <div class="tooltip__row tooltip__row--ra" data-field="price">
+    <!-- Price -->
+    <div class="tooltip__content">
+      <TextSlider />
+    </div>
+    <div class="tooltip__content">
+      <TextSlider />
     </div>
   </div>
 </div>
@@ -46,23 +53,30 @@ const { grid } = Astro.props;
     position: absolute;
     top: 0;
     left: 0;
+    padding: 1rem;
     width: 240px;
-    background: #abcdef;
-    color: #000;
+    background: #000;
+    color: #bababa;
     display: grid;
     grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto;
     pointer-events: none;
     justify-content: space-between;
+    grid-row-gap: 0.25rem;
     will-change: transform;
   }
   .tooltip__row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 100%;
+    grid-template-areas: "tt-content";
     font-size: 12px;
-    padding: 0.2rem;
   }
-  .tooltip__row > [data-field="productTitle"] {
+  .tooltip__row--ra {
+    justify-self: end;
+    text-align: right;
+  }
+  .tooltip__row:first-child {
     text-transform: uppercase;
     font-weight: bold;
     color: #fff;
@@ -70,6 +84,7 @@ const { grid } = Astro.props;
   .tooltip__content {
     grid-area: tt-content;
     white-space: nowrap;
+    text-box: trim-both cap alphabetic;
   }
 </style>
 

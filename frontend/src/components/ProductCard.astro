@@ -7,6 +7,14 @@ type Props = {
 };
 
 const { product } = Astro.props;
+const currencyCode = product.data.price.currency;
+const amount = (product.data.price.amount/100).toString();
+
+const price = `${new Intl.NumberFormat(undefined, {
+  style: "currency",
+  currency: currencyCode,
+  currencyDisplay: "narrowSymbol",
+}).format(parseFloat(amount))}`
 
 
 
@@ -15,7 +23,7 @@ const { product } = Astro.props;
 <a class="product-card"
 data-product-title={product.data.name}
 data-creator-name={product.data.creator.id}
-data-price={product.data.price.amount}
+data-price={price}
 data-astro-prefetch
 href={`/${product.data.creator.id}/products/${product.id}`}>
   <div>
