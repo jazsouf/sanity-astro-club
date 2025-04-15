@@ -1,7 +1,7 @@
-import { defineCollection, reference, z } from 'astro:content';
 import { glob } from 'astro/loaders';
-import { getAllCreators, getAllProducts } from './data/sanity';
+import { defineCollection, reference, z } from 'astro:content';
 import { getProductById } from './data/polar';
+import { getAllCreators, getAllProducts } from './data/sanity';
 
 
 const products = defineCollection({

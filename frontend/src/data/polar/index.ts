@@ -1,4 +1,4 @@
-import {POLAR_ACCESS_TOKEN} from "astro:env/server"
+import { POLAR_ACCESS_TOKEN } from "astro:env/server";
 
 const options = {method: 'GET', headers: {Authorization: `Bearer ${POLAR_ACCESS_TOKEN}`}};
 

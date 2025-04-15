@@ -1,20 +1,16 @@
 ---
 import type { CollectionEntry } from "astro:content";
 import SanityImage from "./SanityImage.astro";
+import {getFormattedPrice} from '../utils/getFormattedPrice'
 
 type Props = {
   product: CollectionEntry<"products">;
 };
 
 const { product } = Astro.props;
-const currencyCode = product.data.price.currency;
-const amount = (product.data.price.amount/100).toString();
 
-const price = `${new Intl.NumberFormat(undefined, {
-  style: "currency",
-  currency: currencyCode,
-  currencyDisplay: "narrowSymbol",
-}).format(parseFloat(amount))}`
+
+const price = getFormattedPrice(product.data.price)
 
 
 

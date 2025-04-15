@@ -1,9 +1,9 @@
 ---
 import type { CollectionEntry } from "astro:content";
 import { getCollection, render } from "astro:content";
-import BaseLayout from "../layouts/BaseLayout.astro";
 import Separator from "../components/Separator.astro";
-import AlbumGrid from "../components/AlbumGrid.astro";
+import AlbumGrid from "../components/old/AlbumGrid.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
 
 export const getStaticPaths = async () => {
   // Fetch all artists from the 'artists' collection

@@ -5,7 +5,8 @@ import RichText from "../../../components/RichText.astro";
 import SanityImage from "../../../components/SanityImage.astro";
 import Separator from "../../../components/Separator.astro";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
-
+import { getFormattedPrice } from "../../../utils/getFormattedPrice";
+ get the api here from polar
 export const getStaticPaths = async () => {
   // Fetch all products from the 'products' collection
   const products = await getCollection("products");
@@ -54,7 +55,8 @@ type Props = {
 
 const { creator, product } = Astro.props; // Extract creator and product data from props
 
-console.log(product.data.content)
+const price = getFormattedPrice(product.data.price)
+
 ---
 
 <BaseLayout title={product.data.name}>
@@ -71,7 +73,20 @@ console.log(product.data.content)
       <SanityImage node={product.data.imageWithAlt} width={1000} />
       <div class="content">
         <RichText content={product.data.content}  />
+        <button>Get A Digital Copy for {price}
+        </button>
       </div>
     </div>
   </section>
 </BaseLayout>
+
+<style>
+.cart-action {
+  display: flex;
+  gap: 1rem;
+}
+
+button {
+  font-weight: bold;
+}
+</style>
