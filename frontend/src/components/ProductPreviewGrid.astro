@@ -1,0 +1,23 @@
+---
+import type { CollectionEntry } from "astro:content";
+import ProductCard from "./ProductCard.astro";
+
+type Props = {
+  products: CollectionEntry<"products">[];
+};
+
+const { products } = Astro.props;
+---
+
+<section>
+  {products.map((product) => <ProductCard product={product} />)}
+</section>
+
+<style>
+  section {
+    display: flex;
+    width: 100%;
+    gap: 2rem;
+    flex-direction: column;
+  }
+</style>

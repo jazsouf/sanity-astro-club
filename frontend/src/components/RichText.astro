@@ -6,7 +6,7 @@ import SanityImage from './SanityImage.astro';
 
 
 interface Props {
-  content: PortableTextProps["value"];
+  content: unknown[];
 }
 
 const components = {
@@ -17,6 +17,8 @@ const components = {
 }
 
 const { content } = Astro.props;
+
+
 ---
 
-<PortableTextInternal value={content} components={components} />
+<PortableTextInternal value={content as PortableTextProps["value"]} components={components} />

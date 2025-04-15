@@ -1,7 +1,9 @@
 ---
 import type { CollectionEntry } from "astro:content";
 import { getCollection, render } from "astro:content";
-import ProductGrid from "../components/ProductGrid.astro";
+import ProductPreviewGrid from "../components/ProductPreviewGrid.astro";
+import RichText from "../components/RichText.astro";
+import SanityImage from "../components/SanityImage.astro";
 import Separator from "../components/Separator.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
@@ -58,30 +60,26 @@ const { Content } = await render(creator);
         <span class="faded">({creator.data.name})</span>
       </h2>
       <div>
-        <a class="back" href="/">View all</a>
+        <a class="back" href="/">Back Home</a>
         <span class="faded">/</span>
         <a href={`/${nextCreator.id}`}>Next creator</a>
       </div>
     </header>
     <Separator />
     <div class="content-wrap">
-      <img
-        class="image fade-in"
-        src={creator.data.imageWithAlt.ref}
-        alt={creator.data.imageWithAlt.alt}
+      <SanityImage
+        node={creator.data.imageWithAlt}
+        width={1000}
       />
       <div class="content">
         <h3>Biography</h3>
-        <Content />
-        <dl>
-          <dt>Genre</dt><dd>{creator.data.content}</dd>
-        </dl>
+        <RichText content={creator.data.content} />
       </div>
       {
         products.length > 0 && (
         <div class="products">
-            <h3>Releases</h3>
-            <ProductGrid products={products} />
+            <h3>Pieces</h3>
+            <ProductPreviewGrid products={products.slice(0,2)} />
           </div>
         )
       }

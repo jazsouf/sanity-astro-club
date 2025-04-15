@@ -1,6 +1,8 @@
 ---
 import type { CollectionEntry } from "astro:content";
-import { getCollection, getEntry, render } from "astro:content";
+import { getCollection, getEntry } from "astro:content";
+import RichText from "../../../components/RichText.astro";
+import SanityImage from "../../../components/SanityImage.astro";
 import Separator from "../../../components/Separator.astro";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 
@@ -52,8 +54,7 @@ type Props = {
 
 const { creator, product } = Astro.props; // Extract creator and product data from props
 
-// Render the content of the product (e.g., markdown or MDX content)
-const { Content } = await render(product);
+console.log(product.data.content)
 ---
 
 <BaseLayout title={product.data.name}>
@@ -67,14 +68,9 @@ const { Content } = await render(product);
     </header>
     <Separator />
     <div class="content-wrap">
-      <img
-        class="image fade-in"
-        src={product.data.imageWithAlt.ref}
-        alt={product.data.imageWithAlt.alt}
-      />
+      <SanityImage node={product.data.imageWithAlt} width={1000} />
       <div class="content">
-        <!-- TODO convert to PortableText -->
-        <Content />
+        <RichText content={product.data.content}  />
       </div>
     </div>
   </section>
