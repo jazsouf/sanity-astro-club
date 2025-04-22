@@ -4,6 +4,7 @@ import { getCollection, getEntry } from "astro:content";
 import RichText from "../../../components/RichText.astro";
 import SanityImage from "../../../components/SanityImage.astro";
 import Separator from "../../../components/Separator.astro";
+import { getCheckoutUrl } from "../../../data/polar";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import { getFormattedPrice } from "../../../utils/getFormattedPrice";
 
@@ -58,7 +59,7 @@ const { creator, product } = Astro.props; // Extract creator and product data fr
 const price = getFormattedPrice(product.data.price)
 
 // TODO: fetch the checkout link from Polar
-const productCheckoutLink = '#'
+const productCheckoutLink = await getCheckoutUrl([product.data.sku]) ??'#'
 
 ---
 
@@ -76,7 +77,7 @@ const productCheckoutLink = '#'
       <SanityImage node={product.data.imageWithAlt} width={1000} />
       <div class="content">
         <RichText content={product.data.content}  />
-        {productCheckoutLink ? <a href={productCheckoutLink}>Get A Digital Copy for {price}
+        {productCheckoutLink ? <a target="_blank" href={productCheckoutLink}>Get A Digital Copy for {price}
         </a> : <>ERROR NO CHECKOUT LINK</>}
       </div>
     </div>
