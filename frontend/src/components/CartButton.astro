@@ -1,12 +1,16 @@
-<button id="openCart">Cart</button>
+<button id="openCart">
+  <slot />
+</button>
 
 <script>
-  import { isCartOpen } from '../store/cart';
+  import { $isCartOpen } from '../store/cart';
 
-  const $isCartOpen = isCartOpen.get()
 
   function openCart() {
-    isCartOpen.set(!$isCartOpen);
+
+    console.log('click', $isCartOpen.get());
+
+    $isCartOpen.set(!$isCartOpen.get());
   }
 
   // Add an event listener to the button

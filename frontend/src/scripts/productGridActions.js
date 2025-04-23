@@ -92,7 +92,7 @@ const filterGrid = (searchValue) => {
   gridItems.forEach((item) => {
     const creatorName = item.getAttribute('data-creatorName').toLowerCase();
     const productTitle = item.getAttribute('data-productTitle').toLowerCase();
-    console.log(creatorName, productTitle);
+
 
     item.style.display =
       creatorName.includes(lowerCaseSearch) || productTitle.includes(lowerCaseSearch)

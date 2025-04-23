@@ -15,8 +15,10 @@ const itemInfo = {
 };
 ---
 
-<form data-add-to-cart-form data-id={id} data-title={title} data-image-ref={imageRef}>
-  <slot />
+<form  data-add-to-cart-form data-id={id} data-title={title} data-image-ref={imageRef}>
+  <button type="submit">
+    <slot />
+  </button>
 </form>
 
 <script>

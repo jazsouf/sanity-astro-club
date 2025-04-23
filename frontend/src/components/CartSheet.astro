@@ -1,14 +1,58 @@
-<div id="cart" style="display: none">My Cart</div>
+
+
+<div id="cart" style="display: none">
+      <aside>
+        <cart-items></cart-items>
+      </aside>
+</div>
 
 <script>
-  import { isCartOpen } from '../store/cart';
+  import { $cartItems, $isCartOpen } from '../store/cart';
 
-  // Listen to changes in the store, and show/hide the dialog accordingly
-  isCartOpen.subscribe(open => {
+  $isCartOpen.subscribe(open => {
+    console.log('sub');
+
     if (open) {
       document.getElementById('cart').style.display = 'block';
+      console.log('show');
+
+
     } else {
+      console.log('hide');
       document.getElementById('cart').style.display = 'none';
     }
   })
+
+   class CartItems extends HTMLElement {
+     constructor() {
+       super();
+       this.render();
+
+       $cartItems.subscribe(items => {
+         this.render(items);
+       });
+     }
+
+     render(items = $cartItems.get()) {
+       const values = Object.values(items);
+
+       if (values.length) {
+         this.innerHTML = `
+           <ul>
+             ${values.map(cartItem => `
+               <li>
+                 <img src="${cartItem.imageRef}" alt="${cartItem.imageRef}" />
+                 <h3>${cartItem.title}</h3>
+                 <p>Quantity: ${cartItem.quantity}</p>
+               </li>
+             `).join('')}
+           </ul>
+         `;
+       } else {
+         this.innerHTML = `<p>Your cart is empty!</p>`;
+       }
+     }
+   }
+
+   customElements.define('cart-items', CartItems);
 </script>

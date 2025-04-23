@@ -5,12 +5,13 @@ import "../styles/global.css";
 
 import { SEO } from "astro-seo";
 
-import SmoothScroll from "../components/SmoothScroll.astro";
-import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+import SmoothScroll from "../components/SmoothScroll.astro";
 
 import "@fontsource-variable/instrument-sans";
 import instrumentSansWoff2 from "@fontsource-variable/instrument-sans/files/instrument-sans-latin-wght-normal.woff2";
+import CartSheet from "../components/CartSheet.astro";
 
 type Props = {
   title: string;
@@ -84,6 +85,7 @@ const currentPage =
     <Header />
     <slot />
     <Footer />
+    <CartSheet />
     <script src="../scripts/imageFade.js"></script>
   </body>
 </html>

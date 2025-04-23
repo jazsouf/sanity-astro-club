@@ -29,7 +29,6 @@ export const imageWithAlt = defineType({
       image: "image",
     },
     prepare({ alt, image }) {
-      console.log({ image });
       return {
         media: image ?? null,
       };

@@ -116,7 +116,7 @@ class Tooltip {
     const creatorName = this.hoverTarget.dataset.creatorName;
     const price = this.hoverTarget.dataset.price;
 
-    console.log(this.hoverTarget.dataset);
+
 
 
     const updateTimeline = gsap.timeline();

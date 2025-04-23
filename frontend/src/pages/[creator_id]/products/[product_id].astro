@@ -8,6 +8,7 @@ import Separator from "../../../components/Separator.astro";
 import { getCheckoutSession } from "../../../data/polar";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import { getFormattedPrice } from "../../../utils/getFormattedPrice";
+import TextSlider from "../../../components/TextSlider.astro";
 
 export const getStaticPaths = async () => {
   // Fetch all products from the 'products' collection
@@ -80,7 +81,7 @@ const productCheckoutSession = await getCheckoutSession([product.data.sku])
         <RichText content={product.data.content}  />
         {productCheckoutSession ? <a id="checkout-link" data-polar-client-token={productCheckoutSession.clientSecret} target="_blank"  href={productCheckoutSession.initialUrl}>Get A Digital Copy for {price}
         </a> : <>ERROR NO CHECKOUT LINK</>}
-        <AddToCartForm id={product.data.sku} title={product.data.name} imageRef={product.data.imageWithAlt.ref} />
+        <AddToCartForm id={product.data.sku} title={product.data.name} imageRef={product.data.imageWithAlt.ref}><TextSlider content='Add to Cart' /></AddToCartForm>
 
       </div>
     </div>
@@ -103,7 +104,7 @@ const options = {method: 'GET'};
 
 const checkoutLink  = document.getElementById('checkout-link') as  HTMLAnchorElement;
 const clientSecret = checkoutLink.getAttribute('data-polar-client-token');
-console.log(clientSecret);
+
 
 
 const res = await fetch(`https://api.polar.sh/v1/checkouts/client/${clientSecret}`, options)

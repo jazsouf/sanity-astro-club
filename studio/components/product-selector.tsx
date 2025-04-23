@@ -1,9 +1,9 @@
-import React, { use, useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 
-import { Button, Card, Select, Text } from "@sanity/ui";
+import { Card, Select, Text } from "@sanity/ui";
 
-import { useSecrets } from "@sanity/studio-secrets";
 import { Product } from "@polar-sh/sdk/models/components/product.js";
+import { useSecrets } from "@sanity/studio-secrets";
 import { StringInputProps, set, unset } from "sanity";
 
 export function ProductSelector(props: StringInputProps) {
@@ -48,7 +48,6 @@ export function ProductSelector(props: StringInputProps) {
         return response.json();
       })
       .then((response) => {
-        console.log(response);
         setProducts(response.items || []);
         setIsLoading(false);
       })
