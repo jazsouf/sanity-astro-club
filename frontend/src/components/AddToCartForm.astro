@@ -1,0 +1,43 @@
+---
+interface Props {
+  id: string
+  title: string
+  imageRef: string
+}
+
+const { id, title, imageRef } = Astro.props;
+
+// Hardcoded item info for simplicity
+const itemInfo = {
+  id,
+  title,
+  imageRef,
+};
+---
+
+<form data-add-to-cart-form data-id={id} data-title={title} data-image-ref={imageRef}>
+  <slot />
+</form>
+
+<script>
+  import { addCartItem, isCartOpen } from '../store/cart';
+
+  // Get all forms with the data attribute
+  const form = document.querySelector('[data-add-to-cart-form]');
+  const id = form.getAttribute('data-id');
+  const title = form.getAttribute('data-title');
+  const imageRef = form.getAttribute('data-image-ref');
+
+  const itemInfo = {
+    id,
+    title,
+    imageRef,
+  };
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    isCartOpen.set(true);
+    addCartItem(itemInfo);
+  });
+
+</script>

@@ -1,0 +1,14 @@
+<div id="cart" style="display: none">My Cart</div>
+
+<script>
+  import { isCartOpen } from '../store/cart';
+
+  // Listen to changes in the store, and show/hide the dialog accordingly
+  isCartOpen.subscribe(open => {
+    if (open) {
+      document.getElementById('cart').style.display = 'block';
+    } else {
+      document.getElementById('cart').style.display = 'none';
+    }
+  })
+</script>

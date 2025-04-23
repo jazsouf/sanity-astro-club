@@ -1,6 +1,7 @@
 ---
 import type { CollectionEntry } from "astro:content";
 import { getCollection, getEntry } from "astro:content";
+import AddToCartForm from "../../../components/AddToCartForm.astro";
 import RichText from "../../../components/RichText.astro";
 import SanityImage from "../../../components/SanityImage.astro";
 import Separator from "../../../components/Separator.astro";
@@ -79,6 +80,8 @@ const productCheckoutLink = await getCheckoutUrl([product.data.sku]) ??'#'
         <RichText content={product.data.content}  />
         {productCheckoutLink ? <a target="_blank" href={productCheckoutLink}>Get A Digital Copy for {price}
         </a> : <>ERROR NO CHECKOUT LINK</>}
+        <AddToCartForm id={product.data.sku} title={product.data.name} imageRef={product.data.imageWithAlt.ref} />
+
       </div>
     </div>
   </section>
