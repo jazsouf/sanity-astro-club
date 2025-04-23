@@ -19,7 +19,7 @@ export async function getProductById(sku: string) {
   }
 }
 
-export async function getCheckoutUrl(skus: string[]) {
+export async function getCheckoutSession(skus: string[]) {
 
 
   const body = JSON.stringify({
@@ -38,5 +38,7 @@ export async function getCheckoutUrl(skus: string[]) {
   //   success_url: res.success_url,
   //   id: res.id,
   // }
- return res.url
+ return {
+   initialUrl: res.url,
+   clientSecret:  res.client_secret}
 }

@@ -5,7 +5,7 @@ import AddToCartForm from "../../../components/AddToCartForm.astro";
 import RichText from "../../../components/RichText.astro";
 import SanityImage from "../../../components/SanityImage.astro";
 import Separator from "../../../components/Separator.astro";
-import { getCheckoutUrl } from "../../../data/polar";
+import { getCheckoutSession } from "../../../data/polar";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import { getFormattedPrice } from "../../../utils/getFormattedPrice";
 
@@ -60,7 +60,7 @@ const { creator, product } = Astro.props; // Extract creator and product data fr
 const price = getFormattedPrice(product.data.price)
 
 // TODO: fetch the checkout link from Polar
-const productCheckoutLink = await getCheckoutUrl([product.data.sku]) ??'#'
+const productCheckoutSession = await getCheckoutSession([product.data.sku])
 
 ---
 
@@ -71,14 +71,14 @@ const productCheckoutLink = await getCheckoutUrl([product.data.sku]) ??'#'
         {product.data.name}
         <span class="faded">by {creator.data.alias}</span>
       </h2>
-      <div><a class="back" href={`/${creator.id}`}>Back to creator</a></div>
+      <div><a  class="back" href={`/${creator.id}`}>Back to creator</a></div>
     </header>
     <Separator />
     <div class="content-wrap">
       <SanityImage node={product.data.imageWithAlt} width={1000} />
       <div class="content">
         <RichText content={product.data.content}  />
-        {productCheckoutLink ? <a target="_blank" href={productCheckoutLink}>Get A Digital Copy for {price}
+        {productCheckoutSession ? <a id="checkout-link" data-polar-client-token={productCheckoutSession.clientSecret} target="_blank"  href={productCheckoutSession.initialUrl}>Get A Digital Copy for {price}
         </a> : <>ERROR NO CHECKOUT LINK</>}
         <AddToCartForm id={product.data.sku} title={product.data.name} imageRef={product.data.imageWithAlt.ref} />
 
@@ -97,3 +97,19 @@ button {
   font-weight: bold;
 }
 </style>
+
+<script>
+const options = {method: 'GET'};
+
+const checkoutLink  = document.getElementById('checkout-link') as  HTMLAnchorElement;
+const clientSecret = checkoutLink.getAttribute('data-polar-client-token');
+console.log(clientSecret);
+
+
+const res = await fetch(`https://api.polar.sh/v1/checkouts/client/${clientSecret}`, options)
+  .then(response => response.json())
+  .catch(err => console.error(err));
+
+checkoutLink.href = res.url;
+
+</script>
