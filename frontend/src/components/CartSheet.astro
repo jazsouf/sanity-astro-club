@@ -6,11 +6,10 @@
     width: 350px;
     height: 100vh;
     background-color: white;
-    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
     z-index: 2;
     overflow-y: auto;
-    transition: transform 0.3s ease-in-out;
     padding-top: 2rem;
+    transition: transform 0.3s ease-in-out;
   }
 
   #cart aside {
@@ -61,24 +60,67 @@
     text-align: center;
     color: #999;
   }
+
+    .cart-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.05);
+        z-index: 1;
+        display: none;
+      }
+
 </style>
 
+<div class="cart-overlay" id="cart-overlay"></div>
+
+<cart-sheet>
 <div id="cart" style="display: none">
       <aside>
         <cart-items></cart-items>
       </aside>
 </div>
+</cart-sheet>
 
 <script>
   import { $cartItems, $isCartOpen } from '../store/cart';
 
-      $isCartOpen.subscribe(open => {
-        if (open) {
-          document.getElementById('cart').style.display = 'block';
-        } else {
-          document.getElementById('cart').style.display = 'none';
-        }
-      })
+
+    class CartSheet extends HTMLElement {
+      cart=null
+      overlay=null
+
+      constructor() {
+        super();
+        this.cart = document.getElementById('cart');
+        this.overlay = document.getElementById('cart-overlay');
+
+        $isCartOpen.subscribe(open => {
+          if (open) {
+            this.cart.style.display = 'block';
+            this.overlay.style.display = 'block';
+          } else {
+            this.cart.style.display = 'none';
+            this.overlay.style.display = 'none';
+          }
+        })
+      }
+
+      connectedCallback() {
+        this.overlay.addEventListener('click', () => {
+                $isCartOpen.set(false);
+        });
+      }
+
+      disconnectedCallback() {
+        this.overlay.removeEventListener('click', () => {
+                $isCartOpen.set(false);
+        });
+      }
+    }
+
 
    class CartItems extends HTMLElement {
      constructor() {
@@ -99,6 +141,7 @@
              ${values.map(cartItem => `
                <li>
                  <h3>${cartItem.title}</h3>
+                 <img width="80" height="80" src="${cartItem.imageSrc}" alt="Preview image for ${cartItem.title}">
                  <p>Quantity: ${cartItem.quantity}</p>
                </li>
              `).join('')}
@@ -110,5 +153,6 @@
      }
    }
 
+   customElements.define('cart-sheet', CartSheet);
    customElements.define('cart-items', CartItems);
 </script>

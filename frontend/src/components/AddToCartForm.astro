@@ -1,14 +1,21 @@
 ---
+import type { CollectionEntry } from 'astro:content'
+import { getSanityImage } from '../utils/getSanityImage'
+
+
 interface Props {
   id: string
   title: string
-  imageRef: string
+  imageNode: CollectionEntry<"products">['data']['imageWithAlt']
 }
 
-const { id, title, imageRef } = Astro.props;
+const { id, title, imageNode } = Astro.props;
+
+const image = getSanityImage({node: imageNode, width: 100});
+
 ---
 
-<add-to-cart-form data-id={id} data-title={title} data-image-ref={imageRef}>
+<add-to-cart-form data-id={id} data-title={title} data-image-src={image.url()}>
 <form>
   <button type="submit">
     <slot />
@@ -29,7 +36,7 @@ const { id, title, imageRef } = Astro.props;
       this.itemInfo = {
         id: this.getAttribute('data-id'),
         title: this.getAttribute('data-title'),
-        imageRef: this.getAttribute('data-image-ref'),
+        imageSrc: this.getAttribute('data-image-src'),
       };
     }
 

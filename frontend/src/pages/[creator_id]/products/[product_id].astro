@@ -82,7 +82,7 @@ const productCheckoutSession = await getCheckoutSession([product.data.sku])
         <div class="cta">
            {productCheckoutSession ? <a id="checkout-link" data-polar-client-token={productCheckoutSession.clientSecret} target="_blank"  href={productCheckoutSession.initialUrl}>Direct Link to Get A Digital Copy for {price}
             </a> : null}
-            <AddToCartForm id={product.data.sku} title={product.data.name} imageRef={product.data.imageWithAlt.ref}><TextSlider content='Add the Item to your Cart' /></AddToCartForm>
+            <AddToCartForm id={product.data.sku} title={product.data.name} imageNode={product.data.imageWithAlt}><TextSlider content='Add the Item to your Cart' /></AddToCartForm>
         </>
       </div>
     </div>
