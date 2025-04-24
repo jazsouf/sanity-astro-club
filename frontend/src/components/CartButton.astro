@@ -1,18 +1,36 @@
-<button id="openCart">
-  <slot />
+<button>
+  <cart-toggle>
+    <slot />
+  </cart-toggle>
 </button>
 
 <script>
   import { $isCartOpen } from '../store/cart';
 
+  class CartToggle extends HTMLElement {
+      constructor() {
+        super();
+      }
 
-  function openCart() {
+      toggleCart = () => {
+        $isCartOpen.set(!$isCartOpen.get());
+      }
 
-    console.log('click', $isCartOpen.get());
+      closeCart = () => {
+        $isCartOpen.set(false);
+      }
 
-    $isCartOpen.set(!$isCartOpen.get());
-  }
+      connectedCallback() {
+        this.addEventListener('click', this.toggleCart);
+      }
 
-  // Add an event listener to the button
-  document.getElementById('openCart').addEventListener('click', openCart);
+      disconnectedCallback() {
+        this.closeCart();
+        this.removeEventListener('click', this.toggleCart);
+      }
+
+
+    }
+
+    customElements.define('cart-toggle', CartToggle);
 </script>

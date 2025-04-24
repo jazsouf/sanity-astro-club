@@ -79,10 +79,11 @@ const productCheckoutSession = await getCheckoutSession([product.data.sku])
       <SanityImage node={product.data.imageWithAlt} width={1000} />
       <div class="content">
         <RichText content={product.data.content}  />
-        {productCheckoutSession ? <a id="checkout-link" data-polar-client-token={productCheckoutSession.clientSecret} target="_blank"  href={productCheckoutSession.initialUrl}>Get A Digital Copy for {price}
-        </a> : <>ERROR NO CHECKOUT LINK</>}
-        <AddToCartForm id={product.data.sku} title={product.data.name} imageRef={product.data.imageWithAlt.ref}><TextSlider content='Add to Cart' /></AddToCartForm>
-
+        <div class="cta">
+           {productCheckoutSession ? <a id="checkout-link" data-polar-client-token={productCheckoutSession.clientSecret} target="_blank"  href={productCheckoutSession.initialUrl}>Direct Link to Get A Digital Copy for {price}
+            </a> : null}
+            <AddToCartForm id={product.data.sku} title={product.data.name} imageRef={product.data.imageWithAlt.ref}><TextSlider content='Add the Item to your Cart' /></AddToCartForm>
+        </>
       </div>
     </div>
   </section>
@@ -96,6 +97,13 @@ const productCheckoutSession = await getCheckoutSession([product.data.sku])
 
 button {
   font-weight: bold;
+}
+
+.cta {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
 }
 </style>
 

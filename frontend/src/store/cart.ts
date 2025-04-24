@@ -13,6 +13,7 @@ export const $cartItems = map<Record<string, CartItem>>({});
 
 type ItemDisplayInfo = Pick<CartItem, 'id' | 'title' | 'imageRef'>;
 export function addCartItem({ id, title, imageRef }: ItemDisplayInfo) {
+
   const existingEntry = $cartItems.get()[id];
   if (existingEntry) {
     $cartItems.setKey(id, {

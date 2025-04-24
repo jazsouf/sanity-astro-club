@@ -1,4 +1,67 @@
+<style>
+  #cart {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 350px;
+    height: 100vh;
+    background-color: white;
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
+    z-index: 2;
+    overflow-y: auto;
+    transition: transform 0.3s ease-in-out;
+    padding-top: 2rem;
+  }
 
+  #cart aside {
+    padding: 20px;
+  }
+
+  cart-items ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  cart-items li {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    grid-template-areas:
+      "img title"
+      "img quantity";
+    gap: 10px;
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+  }
+
+  cart-items img {
+    grid-area: img;
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 4px;
+  }
+
+  cart-items h3 {
+    grid-area: title;
+    margin: 0;
+    font-size: 16px;
+  }
+
+  cart-items p {
+    grid-area: quantity;
+    margin: 5px 0 0;
+    font-size: 14px;
+    color: #666;
+  }
+
+  cart-items p:empty {
+    font-size: 16px;
+    padding: 30px 0;
+    text-align: center;
+    color: #999;
+  }
+</style>
 
 <div id="cart" style="display: none">
       <aside>
@@ -9,19 +72,13 @@
 <script>
   import { $cartItems, $isCartOpen } from '../store/cart';
 
-  $isCartOpen.subscribe(open => {
-    console.log('sub');
-
-    if (open) {
-      document.getElementById('cart').style.display = 'block';
-      console.log('show');
-
-
-    } else {
-      console.log('hide');
-      document.getElementById('cart').style.display = 'none';
-    }
-  })
+      $isCartOpen.subscribe(open => {
+        if (open) {
+          document.getElementById('cart').style.display = 'block';
+        } else {
+          document.getElementById('cart').style.display = 'none';
+        }
+      })
 
    class CartItems extends HTMLElement {
      constructor() {
@@ -41,7 +98,6 @@
            <ul>
              ${values.map(cartItem => `
                <li>
-                 <img src="${cartItem.imageRef}" alt="${cartItem.imageRef}" />
                  <h3>${cartItem.title}</h3>
                  <p>Quantity: ${cartItem.quantity}</p>
                </li>

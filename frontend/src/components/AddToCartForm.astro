@@ -6,40 +6,47 @@ interface Props {
 }
 
 const { id, title, imageRef } = Astro.props;
-
-// Hardcoded item info for simplicity
-const itemInfo = {
-  id,
-  title,
-  imageRef,
-};
 ---
 
-<form  data-add-to-cart-form data-id={id} data-title={title} data-image-ref={imageRef}>
+<add-to-cart-form data-id={id} data-title={title} data-image-ref={imageRef}>
+<form>
   <button type="submit">
     <slot />
   </button>
 </form>
+</add-to-cart-form>
 
 <script>
-  import { addCartItem, isCartOpen } from '../store/cart';
+  import { addCartItem, $isCartOpen } from '../store/cart';
 
-  // Get all forms with the data attribute
-  const form = document.querySelector('[data-add-to-cart-form]');
-  const id = form.getAttribute('data-id');
-  const title = form.getAttribute('data-title');
-  const imageRef = form.getAttribute('data-image-ref');
+  class AddToCartForm extends HTMLElement {
+    form = null
+    itemInfo = null
 
-  const itemInfo = {
-    id,
-    title,
-    imageRef,
-  };
+    constructor() {
+      super();
+      this.form = this.querySelector('form');
+      this.itemInfo = {
+        id: this.getAttribute('data-id'),
+        title: this.getAttribute('data-title'),
+        imageRef: this.getAttribute('data-image-ref'),
+      };
+    }
 
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    isCartOpen.set(true);
-    addCartItem(itemInfo);
-  });
+    addToCart = (e: SubmitEvent) => {
+      e.preventDefault();
+      $isCartOpen.set(true);
+      addCartItem(this.itemInfo);
+    }
 
+    connectedCallback() {
+      this.form.addEventListener('submit', this.addToCart);
+    }
+
+    disconnectedCallback() {
+          this.form.removeEventListener('submit', this.addToCart);
+    }
+  }
+
+  customElements.define('add-to-cart-form', AddToCartForm);
 </script>
