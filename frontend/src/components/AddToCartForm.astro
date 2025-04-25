@@ -6,16 +6,18 @@ import { getSanityImage } from '../utils/getSanityImage'
 interface Props {
   id: string
   title: string
+  unitPrice: number
+  currency: string
   imageNode: CollectionEntry<"products">['data']['imageWithAlt']
 }
 
-const { id, title, imageNode } = Astro.props;
+const { id, title, unitPrice, currency, imageNode } = Astro.props;
 
 const image = getSanityImage({node: imageNode, width: 100});
 
 ---
 
-<add-to-cart-form data-id={id} data-title={title} data-image-src={image.url()}>
+<add-to-cart-form data-id={id} data-title={title} data-unit-price={unitPrice} data-currency={currency} data-image-src={image.url()}>
 <form>
   <button type="submit">
     <slot />
@@ -36,8 +38,12 @@ const image = getSanityImage({node: imageNode, width: 100});
       this.itemInfo = {
         id: this.getAttribute('data-id'),
         title: this.getAttribute('data-title'),
+        unitPrice: parseFloat(this.getAttribute('data-unit-price')),
+        currency: this.getAttribute('data-currency'),
         imageSrc: this.getAttribute('data-image-src'),
       };
+      console.log(this.itemInfo);
+
     }
 
     addToCart = (e: SubmitEvent) => {

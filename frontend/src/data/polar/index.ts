@@ -20,10 +20,8 @@ export async function getProductById(sku: string) {
 }
 
 export async function getCheckoutSession(skus: string[]) {
-
-
   const body = JSON.stringify({
-    allow_discount_codes :true,
+    allow_discount_codes :false,
     require_billing_address :false,
     products: skus
     });
@@ -41,4 +39,21 @@ export async function getCheckoutSession(skus: string[]) {
  return {
    initialUrl: res.url,
    clientSecret:  res.client_secret}
+}
+
+export async function getCheckoutClientSecret() {
+
+  const res = await fetch('https://api.polar.sh/v1/checkouts/', {...getOptions})
+    .then(response => response.json())
+    .catch(err => console.error(err));
+
+
+
+  // return {
+  //   url: res.url,
+  //   success_url: res.success_url,
+  //   id: res.id,
+  // }
+ return {
+   clientSecret:  res.items[0].client_secret}
 }
