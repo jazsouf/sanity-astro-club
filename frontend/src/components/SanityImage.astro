@@ -1,26 +1,29 @@
 ---
-import type { CollectionEntry } from 'astro:content'
-import { getSanityImage } from '../utils/getSanityImage'
+import type { CollectionEntry } from "astro:content";
+import { getSanityImage } from "../utils/getSanityImage";
 
 interface Props {
-  node : CollectionEntry<"products">['data']['imageWithAlt']
-  width?: number
-  fit?: 'cover' | 'contain'
-  aspectRatio?: '1-1' | '4-3' | '16-9' | '9-16'
+	node: CollectionEntry<"products">["data"]["imageWithAlt"];
+	width?: number;
+	fit?: "cover" | "contain";
+	aspectRatio?: "1-1" | "4-3" | "16-9" | "9-16";
 }
 
-const {node, width =960, fit = 'cover', aspectRatio = '1-1'} = Astro.props
+const { node, width = 960, fit = "cover", aspectRatio = "1-1" } = Astro.props;
 
-let image = getSanityImage({node, width})
+const image = getSanityImage({ node, width });
 ---
 
 <style>
 .cover {
   object-fit: cover;
+  width: 100%;
 }
 
 .contain {
   object-fit: contain;
+  object-position: top;
+  width: 100%;
 }
 
 .ar-1-1 {

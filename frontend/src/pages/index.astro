@@ -1,5 +1,6 @@
 ---
 import { getCollection } from "astro:content";
+import Preloader from "../components/Preloader.astro";
 import ProductGrid from "../components/ProductGrid.astro";
 import ProductGridHeader from "../components/ProductGridHeader.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
@@ -14,7 +15,7 @@ const title = "Astro Sanity Club - All Pieces";
     The <Preloader /> component is used to preload all images on the homepage using the images.loaded.js script.
     If you don’t want to use the preloader (e.g., for faster page load times or if you don’t require preloading images), you can safely remove the <Preloader /> component from this layout.
   -->
-  <!-- <Preloader /> -->
+  <Preloader />
   <ProductGridHeader productsTotal={productsTotal} />
   <ProductGrid products={allProducts} />
 </BaseLayout>

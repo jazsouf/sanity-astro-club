@@ -1,24 +1,21 @@
 ---
-import { PortableText as PortableTextInternal } from 'astro-portabletext';
+import { PortableText as PortableTextInternal } from "astro-portabletext";
 import type { PortableTextProps } from "astro-portabletext/types";
 
-import SanityImage from './SanityImage.astro';
-
+import SanityImage from "./SanityImage.astro";
 
 interface Props {
-  content: unknown[];
+	content: unknown[];
 }
 
 const components = {
-  type: {
-    image: SanityImage,
-  },
-  mark: {},
-}
+	type: {
+		image: SanityImage,
+	},
+	mark: {},
+};
 
 const { content } = Astro.props;
-
-
 ---
 
 <PortableTextInternal value={content as PortableTextProps["value"]} components={components} />

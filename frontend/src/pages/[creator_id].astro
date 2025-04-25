@@ -8,24 +8,24 @@ import Separator from "../components/Separator.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
 export const getStaticPaths = async () => {
-  // Fetch all creators from the 'creators' collection
-  const creators = await getCollection("creators");
+	// Fetch all creators from the 'creators' collection
+	const creators = await getCollection("creators");
 
-  // Map over the creators to generate paths for each creator's page
-  const paths = creators.map((creator) => {
-    return {
-      params: { creator_id: creator.id }, // URL parameter for the creator's ID
-      props: { creators, creator }, // Pass the full creator and all creators as props
-    };
-  });
+	// Map over the creators to generate paths for each creator's page
+	const paths = creators.map((creator) => {
+		return {
+			params: { creator_id: creator.id }, // URL parameter for the creator's ID
+			props: { creators, creator }, // Pass the full creator and all creators as props
+		};
+	});
 
-  // Return the generated paths to Astro for static page generation
-  return paths;
+	// Return the generated paths to Astro for static page generation
+	return paths;
 };
 
 type Props = {
-  creators: CollectionEntry<"creators">[]; // Array of all creators in the collection
-  creator: CollectionEntry<"creators">; // Current creator being rendered
+	creators: CollectionEntry<"creators">[]; // Array of all creators in the collection
+	creator: CollectionEntry<"creators">; // Current creator being rendered
 };
 
 const { creators, creator } = Astro.props; // Extract the creators list and current creator from the props
@@ -44,10 +44,9 @@ const nextCreator = creators[nextCreatorIndex];
 
 // Fetch all products that belong to the current creator
 const products = await getCollection(
-  "products",
-  ({ data }) => data.creator.id === creator_id,
+	"products",
+	({ data }) => data.creator.id === creator_id,
 );
-
 ---
 
 <BaseLayout title={creator.data.name}>

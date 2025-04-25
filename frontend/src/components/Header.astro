@@ -2,15 +2,14 @@
 import Separator from "../components/Separator.astro";
 import TextSlider from "../components/TextSlider.astro";
 
-
 // Get the current pathname
 const currentPath = Astro.url.pathname;
 // Define a map of routes
 const routes = {
-  "/": "Home",
-  "/releases/": "Releases",
-  "/history/": "History",
-  "/contact/": "Contact",
+	"/": "Home",
+	"/releases/": "Releases",
+	"/history/": "History",
+	"/contact/": "Contact",
 };
 // Determine the active route
 const activeRoute = routes[currentPath] || null;

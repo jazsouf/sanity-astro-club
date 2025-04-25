@@ -4,62 +4,44 @@ import { getCollection, getEntry } from "astro:content";
 import RichText from "../../../components/RichText.astro";
 import SanityImage from "../../../components/SanityImage.astro";
 import Separator from "../../../components/Separator.astro";
-import { getCheckoutLink, getCheckoutSession } from "../../../data/polar";
+import { getCheckoutSession } from "../../../data/polar";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import { getFormattedPrice } from "../../../utils/getFormattedPrice";
 
 export const getStaticPaths = async () => {
-  // Fetch all products from the 'products' collection
-  const products = await getCollection("products");
+	// Fetch all products from the 'products' collection
+	const products = await getCollection("products");
 
-  /*
-  // Filter products to ensure each has valid creator data, then map to generate paths
-  const paths = products.filter(product => product.data.creator && product.data.creator.id) // Ensure the product has a valid creator reference
-  .map((product) => {
-    return {
-      params: {
-        creator_id: product.data.creator.id, // Include creator ID in the route parameters
-        product_id: product.id,             // Include product ID in the route parameters
-      },
-      props: {
-        creator: product.data.creator,      // Pass the creator data as props
-        product                           // Pass the product data as props
-      },
-    };
-  });
-  */
+	const paths = await Promise.all(
+		products.map(async (product) => {
+			const creator = await getEntry("creators", product.data.creator.id);
+			return {
+				params: {
+					creator_id: product.data.creator.id,
+					product_id: product.id,
+				},
+				props: {
+					creator,
+					product,
+				},
+			};
+		}),
+	);
 
-  const paths = await Promise.all(
-    products.map(async (product) => {
-      const creator = await getEntry("creators", product.data.creator.id); // Fetch creator by ID
-      return {
-        params: {
-          creator_id: product.data.creator.id, // Include creator ID in route parameters
-          product_id: product.id, // Include product ID in route parameters
-        },
-        props: {
-          creator, // Pass full creator data as props
-          product, // Pass product data as props
-        },
-      };
-    }),
-  );
-
-  // Return the generated paths for static page generation
-  return paths;
+	// Return the generated paths for static page generation
+	return paths;
 };
 
 type Props = {
-  creator: CollectionEntry<"creators">;
-  product: CollectionEntry<"products">;
+	creator: CollectionEntry<"creators">;
+	product: CollectionEntry<"products">;
 };
 
 const { creator, product } = Astro.props;
 
-const price = getFormattedPrice(product.data.price)
+const price = getFormattedPrice(product.data.price);
 
-const productCheckoutLink = await getCheckoutSession([product.data.sku])
-
+const productCheckoutLink = await getCheckoutSession([product.data.sku]);
 ---
 
 <BaseLayout title={product.data.name}>
@@ -73,7 +55,7 @@ const productCheckoutLink = await getCheckoutSession([product.data.sku])
     </header>
     <Separator />
     <div class="content-wrap">
-      <SanityImage node={product.data.imageWithAlt} width={1000} />
+      <SanityImage node={product.data.imageWithAlt} width={1000} fit="contain" aspectRatio="9-16" />
       <div class="content">
         <RichText content={product.data.content}  />
         <checkout-link data-polar-client-token={productCheckoutLink.clientSecret}>

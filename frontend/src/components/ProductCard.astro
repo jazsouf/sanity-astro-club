@@ -1,19 +1,15 @@
 ---
 import type { CollectionEntry } from "astro:content";
+import { getFormattedPrice } from "../utils/getFormattedPrice";
 import SanityImage from "./SanityImage.astro";
-import {getFormattedPrice} from '../utils/getFormattedPrice'
 
 type Props = {
-  product: CollectionEntry<"products">;
+	product: CollectionEntry<"products">;
 };
 
 const { product } = Astro.props;
 
-
-const price = getFormattedPrice(product.data.price)
-
-
-
+const price = getFormattedPrice(product.data.price);
 ---
 
 <a class="product-card"
