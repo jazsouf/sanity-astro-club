@@ -1,14 +1,12 @@
 ---
 import type { CollectionEntry } from "astro:content";
 import { getCollection, getEntry } from "astro:content";
-import AddToCartForm from "../../../components/AddToCartForm.astro";
 import RichText from "../../../components/RichText.astro";
 import SanityImage from "../../../components/SanityImage.astro";
 import Separator from "../../../components/Separator.astro";
-import { getCheckoutSession } from "../../../data/polar";
+import { getCheckoutLink, getCheckoutSession } from "../../../data/polar";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import { getFormattedPrice } from "../../../utils/getFormattedPrice";
-import TextSlider from "../../../components/TextSlider.astro";
 
 export const getStaticPaths = async () => {
   // Fetch all products from the 'products' collection
@@ -52,16 +50,15 @@ export const getStaticPaths = async () => {
 };
 
 type Props = {
-  creator: CollectionEntry<"creators">; // The creator associated with the product
-  product: CollectionEntry<"products">; // The product being rendered
+  creator: CollectionEntry<"creators">;
+  product: CollectionEntry<"products">;
 };
 
-const { creator, product } = Astro.props; // Extract creator and product data from props
+const { creator, product } = Astro.props;
 
 const price = getFormattedPrice(product.data.price)
 
-// TODO: fetch the checkout link from Polar
-const productCheckoutSession = await getCheckoutSession([product.data.sku])
+const productCheckoutLink = await getCheckoutSession([product.data.sku])
 
 ---
 
@@ -79,46 +76,42 @@ const productCheckoutSession = await getCheckoutSession([product.data.sku])
       <SanityImage node={product.data.imageWithAlt} width={1000} />
       <div class="content">
         <RichText content={product.data.content}  />
-        <div class="cta">
-           {productCheckoutSession ? <a id="checkout-link" data-polar-client-token={productCheckoutSession.clientSecret} target="_blank"  href={productCheckoutSession.initialUrl}>Direct Link to Get A Digital Copy for {price}
-            </a> : null}
-            <AddToCartForm id={product.data.sku} title={product.data.name} unitPrice={product.data.price.amount} currency={product.data.price.currency} imageNode={product.data.imageWithAlt}><TextSlider content='Add the Item to your Cart' /></AddToCartForm>
-        </>
+        <checkout-link data-polar-client-token={productCheckoutLink.clientSecret}>
+        {productCheckoutLink ?
+        <a id="checkout-link" target="_blank" href={productCheckoutLink.initialUrl}>Get A Digital Copy for {price}</a> : null}
+        </checkout-link>
       </div>
     </div>
   </section>
 </BaseLayout>
 
-<style>
-.cart-action {
-  display: flex;
-  gap: 1rem;
-}
-
-button {
-  font-weight: bold;
-}
-
-.cta {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  width: 100%;
-}
-</style>
-
 <script>
-const options = {method: 'GET'};
+class CheckoutLink extends HTMLElement {
+  private anchor: HTMLAnchorElement | null
+  private clientSecret : string | null
 
-const checkoutLink  = document.getElementById('checkout-link') as  HTMLAnchorElement;
-const clientSecret = checkoutLink.getAttribute('data-polar-client-token');
+  constructor() {
+    super();
+    this.clientSecret = this.getAttribute('data-polar-client-token');
+    this.anchor = this.querySelector('a');
+  }
 
+  connectedCallback() {
+    this.refreshLink();
+  }
 
+  refreshLink = async () => {
+    console.log(this.clientSecret);
 
-const res = await fetch(`https://api.polar.sh/v1/checkouts/client/${clientSecret}`, options)
-  .then(response => response.json())
-  .catch(err => console.error(err));
+    const res = await fetch(`https://api.polar.sh/v1/checkouts/client/${this.clientSecret}`, {method: 'GET'})
+      .then(response => response.json())
+      .catch(err => console.error(err));
 
-checkoutLink.href = res.url;
+    if (res.url && this.anchor) {
+      this.anchor.href = res.url;
+    }
+  }
+}
 
+customElements.define('checkout-link', CheckoutLink);
 </script>

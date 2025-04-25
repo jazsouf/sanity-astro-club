@@ -1,6 +1,7 @@
 # TODO
 
-- [ ] Add /cart and checkout workflow
+- [ ] Use Font API
+- [ ] Add Biome
 
 - [ ] Update README
 

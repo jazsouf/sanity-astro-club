@@ -1,7 +1,7 @@
 ---
 import Separator from "../components/Separator.astro";
 import TextSlider from "../components/TextSlider.astro";
-import CartButton from "./CartButton.astro";
+
 
 // Get the current pathname
 const currentPath = Astro.url.pathname;
@@ -40,11 +40,6 @@ const activeRoute = routes[currentPath] || null;
         href="/contact/"
         class={activeRoute === "Contact" ? "current" : ""}
         data-astro-prefetch><TextSlider content="Contact" /></a>
-    </li>
-    <li>
-      <CartButton>
-        <TextSlider content="Cart" />
-      </CartButton>
     </li>
   </ul>
 </header>

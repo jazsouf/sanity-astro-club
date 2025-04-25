@@ -5,9 +5,11 @@ import { getSanityImage } from '../utils/getSanityImage'
 interface Props {
   node : CollectionEntry<"products">['data']['imageWithAlt']
   width?: number
+  fit?: 'cover' | 'contain'
+  aspectRatio?: '1-1' | '4-3' | '16-9' | '9-16'
 }
 
-const {node, width =960} = Astro.props
+const {node, width =960, fit = 'cover', aspectRatio = '1-1'} = Astro.props
 
 let image = getSanityImage({node, width})
 ---
@@ -39,4 +41,4 @@ let image = getSanityImage({node, width})
 
 </style>
 
-{image && <img  class="fade-in cover ar-1-1" loading="lazy" src={image.url()} alt={node.alt || ''} />}
+{image && <img  class={`fade-in ${fit} ar-${aspectRatio}`} loading="lazy" src={image.url()} alt={node.alt || ''} />}
